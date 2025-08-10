@@ -82,7 +82,6 @@ if(ele.value.length==1||exceptions.includes(ele.value)){
         ele.value=keyChangeArray[i].newkey
     }
 }
-console.log(keyChangeArray)
 }
 
 addButton.addEventListener("click",()=>{
