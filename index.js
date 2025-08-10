@@ -1,27 +1,31 @@
-const change="c"//FIX LATER
+const keyChangeArray=[
+    {oldkey:"i",newkey:"a"}
+]
+/*TO DO:
+-use array to store key pairs in above format (turn into class?)
+-dynamically add set of html fields that can set these pairs (splice array when erasing element)
+*/
 let input
-let upload=document.querySelector(".upload")
-let go=document.querySelector(".go")
+const upload=document.querySelector(".upload")
+const go=document.querySelector(".go")
 upload.addEventListener("click",()=>{
     inputElement.click()
 })
 go.addEventListener("click",()=>{
-        try{
-            let output=convert(input)
-            let file=new File([JSON.stringify(output)],"project.json",{type: 'json'})
+    try{
+        let file=new File([JSON.stringify(convert(input))],"project.json",{type: 'json'})
+        const link = document.createElement('a')
+        const url = URL.createObjectURL(file)
+        link.href = url
+        link.download = file.name
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
         }
-            catch(error){
-                alert("Something went wrong :(")
-            }
- const link = document.createElement('a')
-  const url = URL.createObjectURL(file)
-  link.href = url
-  link.download = file.name
-  document.body.appendChild(link)
-  link.click()
-
-  document.body.removeChild(link)
-  window.URL.revokeObjectURL(url)
+    catch(error){
+        alert(`Something went wrong. ${error}`)
+        }
 })
 const inputElement = document.getElementById("input");
 inputElement.addEventListener("change", (e)=>{
@@ -33,7 +37,7 @@ inputElement.addEventListener("change", (e)=>{
             input= JSON.parse(reader.result);
             go.style.display="block"
         }catch(error){
-            alert("This isn't a JSON file! Plase upload a different file.")
+            alert("This isn't a JSON file! Please upload a different file.")
         }
     },
     false,
@@ -41,13 +45,19 @@ inputElement.addEventListener("change", (e)=>{
 }, false);
 
 function convert(input){
-    input.targets.forEach((target)=>{
-        let keys=Object.keys(target.blocks)
-        keys.forEach(key=>{
-            if(target.blocks[key].opcode=="event_whenkeypressed"||target.blocks[key].opcode=="sensing_keyoptions"){
-                target.blocks[key].fields.KEY_OPTION[0]=change //FIX LATER
+    let output=JSON.parse(JSON.stringify(input))
+    input.targets.forEach((target,i)=>{
+        let blocks=Object.keys(target.blocks)
+        blocks.forEach(block=>{
+            if(target.blocks[block].opcode=="event_whenkeypressed"||target.blocks[block].opcode=="sensing_keyoptions"){
+                keyChangeArray.forEach(ele=>{
+                    if(target.blocks[block].fields.KEY_OPTION[0]==ele.oldkey){
+                        output.targets[i].blocks[block].fields.KEY_OPTION[0]=ele.newkey
+                    }
+                })
+            
             }
         })
     })
-  return input
+  return output
 }
