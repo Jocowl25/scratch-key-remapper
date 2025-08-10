@@ -1,6 +1,6 @@
 # Scratch Key Remapper
 Let's you remap the keys inside event and sensing "when key pressed" blocks.
-<br> How to use:
+### How to use:
 1. Download Scratch project of choice
 2. Replace .sb3 extension with .zip
 3. Open zip
