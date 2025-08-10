@@ -1,46 +1,69 @@
-#input{
-    opacity:0;
-    width:0;
-    height:0;
-    margin:0;
-    padding:0;
+#input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
 }
-button:hover:valid{
-    cursor:pointer;
-    background-color: rgb(237, 237, 237);
+
+button:hover:valid {
+  cursor: pointer;
+  background-color: #6792d8;
 }
-button:valid{
-    border: 2px solid black;
-    opacity:1
+
+button:valid {
+  border: 2px solid black;
+  opacity: 1;
 }
-button:hover{
-    cursor:not-allowed;
+
+button:hover {
+  cursor: not-allowed;
 }
-button{
-    background-color: white;
-    border:2px solid grey;
-    opacity:0.5;
-    border-radius: 10px;
-    font-size:20px;
+
+button {
+  background-color: #89b4fa;
+  border: 2px solid grey;
+  opacity: 0.5;
+  border-radius: 0.75rem;
+  font-size: 20px;
+  padding: 0.5rem 1rem;
 }
-.download{
-    margin-top:20px;
+
+.download {
+  margin-top: 20px;
 }
-body{
-    background-color: rgb(209, 209, 252);
+
+body {
+  background-color: #eee;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
-.inputText{
-    margin-top:5px;
-    width:70px;
-    text-align:center;
+
+.inputText {
+  margin-top: 5px;
+  width: 70px;
+  text-align: center;
 }
-.add{
-    font-size:15px;
-    margin-bottom:0;
-    padding-bottom:0;
+
+.add, .remove {
+  font-size: 1rem;
+  margin-bottom: 0;
+  padding: 0.25rem 0.5rem;
 }
-.remove{
-    font-size:15px;
-    margin-bottom:0;
-    padding-bottom:0;
+
+* {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+}
+
+h1 {
+  margin: 3rem 0rem;
+  font-size: 3rem;
+}
+
+p {
+  margin: 1rem 0;
 }
