@@ -1,4 +1,4 @@
-#Scratch Key Remapper
+# Scratch Key Remapper
 Let's you remap the keys inside event and sensing "when key pressed" blocks.
 How to use:
 1. Download Scratch project of choice
