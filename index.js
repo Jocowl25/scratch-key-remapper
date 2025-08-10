@@ -69,11 +69,11 @@ const statusText=document.querySelector(".status")
 setInputs()
 
 function change(ele,i){
-if(ele.value.length==1||exceptions.includes(ele.value)){
+if(ele.value.trim().length==1||exceptions.includes(ele.value.trim().toLowerCase())){
     if(ele.classList.contains("oldkey")){
-        keyChangeArray[i].oldkey=ele.value
+        keyChangeArray[i].oldkey=ele.value.trim().toLowerCase()
     }else{
-        keyChangeArray[i].newkey=ele.value
+        keyChangeArray[i].newkey=ele.value.trim().toLowerCase()
     }
 }else{
     if(ele.classList.contains("oldkey")){
@@ -82,6 +82,7 @@ if(ele.value.length==1||exceptions.includes(ele.value)){
         ele.value=keyChangeArray[i].newkey
     }
 }
+console.log(keyChangeArray)
 }
 
 addButton.addEventListener("click",()=>{

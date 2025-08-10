@@ -26,14 +26,21 @@ button{
 .download{
     margin-top:20px;
 }
-.inputSettingDiv{
-    margin-bottom:20px;
-}
 body{
     background-color: rgb(209, 209, 252);
 }
 .inputText{
     margin-top:5px;
-    width:100px;
+    width:70px;
     text-align:center;
+}
+.add{
+    font-size:15px;
+    margin-bottom:0;
+    padding-bottom:0;
+}
+.remove{
+    font-size:15px;
+    margin-bottom:0;
+    padding-bottom:0;
 }
