@@ -8,7 +8,7 @@
 </head>
 <body>   
     <h1>Scratch Key Remapper</h1>
-    <button class="upload">Upload project.json</button>
+    <button class="upload">Upload sb3 or zip file</button>
     <p class="uploadText">No file uploaded!</p>
     <div class="inputSettingDiv">
         <button class="add">Add</button>
@@ -19,18 +19,15 @@
     <button class="download" disabled="true">Convert and Download</button>
     <p>
 How to use:<br>
-1. Download Scratch project of choice<br>
-2. Replace .sb3 extension with .zip<br>
-3. Open zip<br>
-4. Upload the "project.json" file inside the zip<br>
-5. Set old and new key values to whatever you like. Defaults to Scratch-3ds keybinds<br>
-6. Press Convert button. If nothing downloads, press it again<br>
-7. Replace old project.sb3 in zip with new project.sb3. Make sure it is still named "project.sb3"!<br>
-8. Rename zip file back to .sb3. Make sure you change the extension and not just the name!</p>
+1. Download Scratch project of choice. <br>
+2. Upload the Scratch project here. (All code is client side, so your project is only stored on your computer) <br>
+3. Set old and new key values to whatever you like. Defaults to Scratch-3ds keybinds. <br>
+4. Press Convert button.</p>
     <p class="status"></p>
     <a href="https://github.com/Jocowl25/scratch-remap" target="_blank">Source Code on Github</a>
-    <p>Not affiliated with Scratch or the Scratch Team.</p>
-    <input type="file" accept=".json" id="input"/>
+    <p>Not affiliated with Scratch or the Scratch Team. Uses <a href="https://gildas-lormeau.github.io/zip.js/" target="_blank">zip.js</a>.</p>
+    <input type="file" id="input"/>
+    <script type="text/javascript" src="zip-full.min.js"></script>
     <script src="index.js"></script>
 </body>
 </html>

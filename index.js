@@ -56,19 +56,20 @@ const inputSet=`<div>
         </div>`
 
 let input
+let entries
 const uploadText=document.querySelector(".uploadText")
 const addButton=document.querySelector(".add")
 const removeButton=document.querySelector(".remove")
 const keyfield=document.querySelector(".keyfield")
 keyfield.innerHTML=fieldArray.join("")
 const upload=document.querySelector(".upload")
-const download=document.querySelector(".download")
-download.disabled=true
+const downloadButton=document.querySelector(".download")
+downloadButton.disabled=true
 const statusText=document.querySelector(".status")
 
 setInputs()
 
-function change(ele,i){
+function inputUpdater(ele,i){
 if(ele.value.trim().length==1||exceptions.includes(ele.value.trim().toLowerCase())){
     if(ele.classList.contains("oldkey")){
         keyChangeArray[i].oldkey=ele.value.trim().toLowerCase()
@@ -103,29 +104,21 @@ removeButton.addEventListener("click",()=>{
 function setInputs(){
     document.querySelectorAll(".oldkey").forEach((ele,i)=>{
         ele.value=keyChangeArray[i].oldkey
-        ele.addEventListener("change",()=>change(ele,i))
+        ele.addEventListener("change",()=>inputUpdater(ele,i))
     })  
     document.querySelectorAll(".newkey").forEach((ele,i)=>{
         ele.value=keyChangeArray[i].newkey
-        ele.addEventListener("change",()=>change(ele,i))
+        ele.addEventListener("change",()=>inputUpdater(ele,i))
     })
 }
 
 upload.addEventListener("click",()=>{
+    uploadText.innerHTML="Uploading..."
     inputElement.click()
 })
-download.addEventListener("click",()=>{
+downloadButton.addEventListener("click",()=>{
     try{
-        let file=new File([JSON.stringify(convert(input))],"project.json",{type: 'json'})
-        const link = document.createElement('a')
-        const url = URL.createObjectURL(file)
-        link.href = url
-        link.download = file.name
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        window.URL.revokeObjectURL(url)
-        statusText.innerHTML="Done!"
+        download()
         }
     catch(error){
         alert(`Something went wrong. ${error}`)
@@ -134,21 +127,54 @@ download.addEventListener("click",()=>{
 })
 const inputElement = document.getElementById("input");
 inputElement.addEventListener("change", (e)=>{
-    const file = inputElement.files[0];
-    const reader = new FileReader();
-    reader.readAsText(file);
-    reader.addEventListener("load",() => {
-        try{
-            input= JSON.parse(reader.result);
-            download.disabled=false
-            uploadText.innerHTML=`Uploaded ${file.name}`
-        }catch(error){
-            alert("This isn't a JSON file! Please upload a different file.")
-        }
-    },
-    false,
-  );
+   openZip()
 }, false);
+
+async function download(){
+    const blobWriter = new zip.BlobWriter("application/zip");
+    const writer = new zip.ZipWriter(blobWriter);
+    for(let i=0;i<entries.length;i++){
+        if(entries[i].filename=="project.json"){
+            statusText.innerHTML="Converting..."
+            await writer.add("project.json", new zip.TextReader(convert(input)));
+            statusText.innerHTML="Restoring ZIP..."
+            continue
+        }
+        let data= await entries[i].getData(new zip.BlobWriter())
+        await writer.add(entries[i].filename,new zip.BlobReader(data))
+    }
+    await writer.close();
+    const blob = await blobWriter.getData();
+    //
+    //
+    statusText.innerHTML="Downloading..."
+    let file=new File([blob],`${inputElement.files[0].name}`)
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(file)
+    link.href = url
+    link.download = file.name
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+    statusText.innerHTML="Done!"
+}
+
+async function openZip(){
+    const file = inputElement.files[0];
+    const reader = new zip.ZipReader(new zip.BlobReader(file));  
+    entries = await reader.getEntries();
+    for(let i=0;i<entries.length;i++){
+        if(entries[i].filename=="project.json"){
+            input=await entries[i].getData(new zip.TextWriter())
+            uploadText.innerHTML=`Uploaded "${entries[i].filename}"`
+        }
+    }
+    await reader.close();
+    input= JSON.parse(input);
+    downloadButton.disabled=false
+}
+
 
 function convert(input){
         statusText.innerHTML="Converting..."
@@ -166,6 +192,5 @@ function convert(input){
             }
         })
     })
-    statusText.innerHTML="Downloading..."
-  return output
+  return JSON.stringify(output)
 }
