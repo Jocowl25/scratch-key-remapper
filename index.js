@@ -167,7 +167,7 @@ async function openZip(){
     for(let i=0;i<entries.length;i++){
         if(entries[i].filename=="project.json"){
             input=await entries[i].getData(new zip.TextWriter())
-            uploadText.innerHTML=`Uploaded ${inputElement.files[0].name}`
+            uploadText.innerHTML=`Uploaded "${inputElement.files[0].name}"`
         }
     }
     await reader.close();
