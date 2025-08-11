@@ -127,8 +127,42 @@ downloadButton.addEventListener("click",()=>{
 })
 const inputElement = document.getElementById("input");
 inputElement.addEventListener("change", (e)=>{
-   openZip()
+    const file = inputElement.files[0];
+    if(file.name.split('.').pop()!="sb3"&&file.name.split('.').pop()!="zip"&&file.name.split('.').pop()!="sb"&&file.name.split('.').pop()!="sb2"){
+        alert("Not a valid file type!")
+        uploadText.innerHTML="No file uploaded!"
+        return;
+    }
+    try{
+    openZip(file)
+    }
+    catch(error){
+        alert(`Something went wrong. ${error}`)
+        statusText.innerHTML=`Something went wrong. ${error}`
+    }
 }, false);
+
+
+
+async function openZip(file){
+    const reader = new zip.ZipReader(new zip.BlobReader(file));  
+    entries = await reader.getEntries();
+    for(let i=0;i<entries.length;i++){
+        if(entries[i].filename=="project.json"){
+            input=await entries[i].getData(new zip.TextWriter())
+        }
+    }
+    await reader.close();
+    try{
+    input= JSON.parse(input);
+    uploadText.innerHTML=`Uploaded "${inputElement.files[0].name}"`
+    downloadButton.disabled=false
+    }
+    catch{
+        alert("Not a valid Scratch project!")
+        uploadText.innerHTML="No file uploaded!"
+    }
+}
 
 async function download(){
     const blobWriter = new zip.BlobWriter("application/zip");
@@ -159,22 +193,6 @@ async function download(){
     window.URL.revokeObjectURL(url)
     statusText.innerHTML="Done!"
 }
-
-async function openZip(){
-    const file = inputElement.files[0];
-    const reader = new zip.ZipReader(new zip.BlobReader(file));  
-    entries = await reader.getEntries();
-    for(let i=0;i<entries.length;i++){
-        if(entries[i].filename=="project.json"){
-            input=await entries[i].getData(new zip.TextWriter())
-            uploadText.innerHTML=`Uploaded "${inputElement.files[0].name}"`
-        }
-    }
-    await reader.close();
-    input= JSON.parse(input);
-    downloadButton.disabled=false
-}
-
 
 function convert(input){
         statusText.innerHTML="Converting..."
